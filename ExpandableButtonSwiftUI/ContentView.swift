@@ -9,8 +9,46 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showAlert: Bool = false
+    @State private var alertLabel: String = ""
+
+    
     var body: some View {
-        Text("Hello, World!")
+      NavigationView {
+        ZStack {
+          // List
+          List(1...20, id: \.self) { i in
+            Text("Item \(i)")
+              .padding()
+          }
+
+          VStack {
+            Spacer()
+            HStack {
+              Spacer()
+              ExpandableButtonPanel(
+                primaryItem: ExpandableButtonItem(label: "➕"),
+                secondaryItems: [
+                  ExpandableButtonItem(label: "🌞") {
+                    self.alertLabel = "🌞"
+                    self.showAlert.toggle()
+                  },
+                  ExpandableButtonItem(label: "🥑") {
+                    self.alertLabel = "🥑"
+                    self.showAlert.toggle()
+                  }
+                    
+                ]
+              )
+              .padding()
+            }
+          }
+        }
+        .alert(isPresented: $showAlert) {
+          return Alert(title: Text("You selected \(self.alertLabel)"))
+        }
+        .navigationBarTitle("Numbers")
+      }
     }
 }
 
